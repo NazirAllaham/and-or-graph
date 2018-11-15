@@ -8,39 +8,45 @@ namespace and_or_graph
 {
     class Operator
     {
-        private Node from;
-        private LinkedList<Node> branches;
-        private int  cost;
+        private double              cost;
+        private Node                start;
+        private LinkedList<Node>    ends;
 
-        public Operator(Node from, LinkedList<Node> branches, int cost)
+        public double Cost { get => cost; set => cost = value; }
+        internal Node Start { get => start; set => start = value; }
+        internal LinkedList<Node> Ends { get => ends; set => ends = value; }
+
+        public Operator(double cost, Node start, LinkedList<Node> ends = null)
         {
             this.cost = cost;
-            this.from = from;
-            if (branches != null)
-                this.branches = branches;
-            else
-                this.branches = new LinkedList<Node>();
+            this.start = start;
 
-            this.from.AddOperator(this);
-        }
-
-        public void AddBranch(Node branch)
-        {
-            this.branches.AddFirst(branch);
-        }
-
-        public int CalculateHeuristicCost()
-        {
-            int cost = 0;
-            foreach (Node branch in branches)
+            if (ends == null)
             {
-                cost += branch.CalculateEstimatedCost();
+                this.ends = new LinkedList<Node>();
             }
-            return cost;
+            else
+            {
+                this.ends = ends;
+            }
+            
+            start.AddOperator(this);
         }
 
-        public int Cost { get => cost; set => cost = value; }
-        internal Node From { get => from; set => from = value; }
-        internal LinkedList<Node> Branches { get => branches; set => branches = value; }
+        public void AddEndNode(Node node)
+        {
+            this.ends.AddFirst(node);
+        }
+
+        public double HeuristicCost()
+        {
+            double mCost = 0.0f;
+            foreach (Node end in ends)
+            {
+                mCost += end.Heuristic;
+            }
+
+            return mCost;
+        }
     }
 }

@@ -6,46 +6,69 @@ using System.Threading.Tasks;
 
 namespace and_or_graph
 {
-    class Node
+    class Node : IComparable
     {
-        private bool terminal;
-        private int id;
-        private int heuristic;
-        private int cost;
-        private LinkedList<Operator> operators;
+        private int     id;
+        private double  cost;
+        private double  heuristic;
+        private bool    terminal;
+        private HashSet<Operator> operators;
+        private Node parent;
 
-        public Node (int id, int heuristic, int cost, bool terminal, LinkedList<Operator> operators = null)
+        public Node (int id, double cost, double heuristic, bool terminal, Node parent, HashSet<Operator> operators = null)
         {
-            this.terminal = terminal;
-            this.id = id;
-            this.heuristic = heuristic;
-            this.cost = cost;
+            this.id         = id;
+            this.cost       = cost;
+            this.heuristic  = heuristic;
+            this.terminal   = terminal;
+
+            if(parent != null)
+                this.parent = parent;
+
             if (operators != null)
                 this.operators = operators;
             else
-                this.operators = new LinkedList<Operator>();
+                this.operators = new HashSet<Operator>();
         }
 
         public void AddOperator(Operator item)
         {
-            this.operators.AddFirst(item);
+            this.operators.Add(item);
         }
 
-        public int CalculateEstimatedCost()
+        public double FullCost()
         {
-            int cost = this.cost;
-            foreach (Operator op in this.operators)
+            double mCost = double.MaxValue;
+            foreach (Operator Op in Operators)
             {
-                cost += op.Cost + op.CalculateHeuristicCost();
+                mCost = Math.Min(mCost, Op.Cost + Op.HeuristicCost());
             }
-            return cost;
+            return mCost + this.Cost;
         }
 
+        public int CompareTo(object obj)
+        {
+            if(obj is Node)
+            {
+                Node o = (Node)obj;
+                double object_f = o.cost + o.heuristic, this_f = this.cost + this.heuristic;
+
+                if (this_f == object_f)
+                    return this.id.CompareTo(o.id);
+                else
+                    return this_f.CompareTo(object_f);
+            }
+            else
+            {
+                return int.MinValue;
+            }
+        }
 
         public int Id { get => id; set => id = value; }
-        public int Heuristic { get => heuristic; set => heuristic = value; }
-        public int Cost { get => cost; set => cost = value; }
-        public LinkedList<Operator> Operators { get => operators; set => operators = value; }
+        public double Heuristic { get => heuristic; set => heuristic = value; }
+        public double Cost { get => cost; set => cost = value; }
         public bool IsTerminal { get => terminal; set => terminal = value; }
+        internal HashSet<Operator> Operators { get => operators; set => operators = value; }
+        internal Node Parent { get => parent; set => parent = value; }
     }
 }

@@ -58,7 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndOrGraph.cs" />
+    <Compile Include="AOGraph.cs" />
+    <Compile Include="AOStar.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Program.cs" />
