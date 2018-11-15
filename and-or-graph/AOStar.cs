@@ -39,8 +39,13 @@ namespace and_or_graph
 
         private void Run(AOGraph mGraph, int start)
         {
+            foreach(Node node in mGraph.Nodes)
+            {
+                this.costs.Add(node.Id, double.MaxValue);
+            }
+
             this.opened.Add(mGraph.Nodes.ElementAt(start));
-            this.costs.Add(start, 0);
+            this.costs[start] = 0;
 
             while(opened.Count > 0)
             {
@@ -85,11 +90,20 @@ namespace and_or_graph
                                 }
                             }
                         }
+                        else
+                        {
+                            Refresh(current);
+                        }
                     }
                 }
             }
 
-            //Refresh(mGraph.Nodes.ElementAt(0));
+            if(costs[start] >= double.MaxValue)
+            {
+                Console.WriteLine("No available paths from start = [{0:D}]", start);
+                return;
+            }
+
             Console.WriteLine("Best solution = " + this.costs[start]);
             foreach (Node node in mGraph.Nodes)
             {

@@ -15,8 +15,8 @@ namespace and_or_graph
             graph.CreateNode(1, double.MaxValue, 30, false);
             graph.CreateNode(2, double.MaxValue, 20, false);
             graph.CreateNode(3, double.MaxValue, 20, false);
-            graph.CreateNode(4, double.MaxValue, 20, true);
-            graph.CreateNode(5, double.MaxValue, 20, true);
+            graph.CreateNode(4, double.MaxValue, 20, false);
+            graph.CreateNode(5, double.MaxValue, 20, false);
             graph.CreateNode(6, double.MaxValue, 15, true);
             graph.CreateNode(7, double.MaxValue, 15, true);
             graph.CreateNode(8, double.MaxValue, 15, true);
